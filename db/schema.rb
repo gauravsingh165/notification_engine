@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_11_092903) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_11_093218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_11_092903) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "notification_id", null: false
+    t.integer "status"
+    t.datetime "delivered_at"
+    t.datetime "read_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notification_id"], name: "index_user_notifications_on_notification_id"
+    t.index ["user_id"], name: "index_user_notifications_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -32,4 +44,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_11_092903) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "user_notifications", "notifications"
+  add_foreign_key "user_notifications", "users"
 end

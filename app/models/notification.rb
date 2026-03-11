@@ -5,6 +5,8 @@ class Notification < ApplicationRecord
   validates :message, presence: true
 
   belongs_to :creator, class_name: "User", foreign_key: "created_by"
+  has_many :user_notifications
+  has_many :users, through: :user_notifications
 
   validate :scheduled_time_in_future
 
