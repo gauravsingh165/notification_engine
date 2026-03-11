@@ -46,3 +46,6 @@ group :development do
 end
 
 gem 'sidekiq'
+gem 'rswag-api'
+gem 'rswag-ui'
+gem 'rswag-specs'
