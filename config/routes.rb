@@ -10,4 +10,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :notifications, only: [:index] do
+    member do
+      post :read
+    end
+  end
 end
