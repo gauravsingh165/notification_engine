@@ -24,6 +24,13 @@ module Admin
       render json: notification
     end
 
+    def send_notification
+        notification = Notification.find(params[:id])
+
+        NotificationSenderService.new(notification).call
+
+        render json: { message: "Notification delivery started" }
+    end
 
     private
 
