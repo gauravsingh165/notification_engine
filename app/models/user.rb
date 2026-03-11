@@ -6,4 +6,12 @@ class User < ApplicationRecord
 
   has_many :user_notifications
   has_many :notifications, through: :user_notifications
+  
+  before_create :generate_auth_token
+
+  private
+
+  def generate_auth_token
+    self.auth_token = SecureRandom.hex(20)
+  end
 end

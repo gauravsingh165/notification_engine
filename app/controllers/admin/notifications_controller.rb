@@ -1,9 +1,9 @@
 module Admin
   class NotificationsController < ApplicationController
-
+    before_action :require_admin
     def create
       notification = Notification.new(notification_params)
-      notification.created_by = params[:admin_id]
+      notification.created_by = @current_user.id
 
       if notification.save
         render json: notification, status: :created
@@ -33,6 +33,12 @@ module Admin
     end
 
     private
+
+    def require_admin
+      unless @current_user.admin?
+        render json: { error: "Admin access required" }, status: :forbidden
+      end
+    end
 
     def notification_params
       params.permit(:title, :message, :status, :scheduled_at)

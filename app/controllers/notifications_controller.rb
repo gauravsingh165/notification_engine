@@ -1,9 +1,7 @@
 class NotificationsController < ApplicationController
 
   def index
-    user = User.find(params[:user_id])
-
-    notifications = user.user_notifications.includes(:notification)
+    notifications = @current_user.user_notifications.includes(:notification)
 
     if params[:status] == "unread"
     notifications = notifications.where.not(status: :read)
@@ -24,10 +22,9 @@ class NotificationsController < ApplicationController
 
 
   def read
-    user = User.find(params[:user_id])
 
     user_notification = UserNotification.find_by!(
-      user: user,
+      user: @current_user,
       notification_id: params[:id]
     )
 
