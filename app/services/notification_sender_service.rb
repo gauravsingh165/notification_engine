@@ -5,6 +5,7 @@ class NotificationSenderService
   end
 
   def call
+    return if @notification.scheduled? && @notification.scheduled_at > Time.current
     users = User.user
 
     users.find_each do |user|

@@ -6,6 +6,12 @@ module Admin
       notification.created_by = @current_user.id
 
       if notification.save
+
+        if notification.scheduled?
+          NotificationSenderJob.set(wait_until: notification.scheduled_at)
+                              .perform_later(notification.id)
+        end
+
         render json: notification, status: :created
       else
         render json: { errors: notification.errors.full_messages }, status: :unprocessable_entity
@@ -26,6 +32,9 @@ module Admin
 
     def send_notification
         notification = Notification.find(params[:id])
+      if notification.scheduled?
+        return render json: { error: "Scheduled notifications are sent automatically" }
+      end
 
         NotificationSenderService.new(notification).call
 

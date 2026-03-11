@@ -30,5 +30,8 @@ module NotificationEngine
     config.api_only = true
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    config.time_zone = "Asia/Kolkata"
+    config.active_record.default_timezone = :local
   end
 end
