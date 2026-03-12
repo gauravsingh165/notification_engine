@@ -385,15 +385,127 @@ Scheduled notifications are implemented using delayed Sidekiq jobs.
 
 ---
 
-# AI Tool Usage
+## AI Usage and Prompts
 
-AI tools (such as ChatGPT) were used for:
+During development, AI tools such as ChatGPT were used to assist with architectural decisions, debugging, infrastructure setup, and documentation.
 
-* architecture discussion
+Below are some examples of prompts used during development.
+
+---
+
+### Prompt 1 – System Design
+
+```
+Prompt:
+How should I design database tables for a notification system where one notification can be delivered to many users and each user has their own read status?
+
+How I used it:
+This helped me decide to create a join table called UserNotification to track delivery status per user.
+
+Modification:
+I designed the schema manually and added fields like delivered_at and read_at to track delivery and read events.
+```
+
+---
+
+### Prompt 2 – Background Job Strategy
+
+```
+Prompt:
+What is the recommended way to process notification delivery asynchronously in a Rails API using Sidekiq?
+
+How I used it:
+This helped me understand how to separate responsibilities between jobs and background processing.
+
+Modification:
+I implemented two jobs:
+- NotificationSenderJob (creates delivery records)
+- DeliverNotificationJob (handles the external API call for delivery)
+```
+
+---
+
+### Prompt 3 – Scheduled Notifications
+
+```
+Prompt:
+How can I schedule a Sidekiq job to run at a specific time using a scheduled_at timestamp in Rails?
+
+How I used it:
+This helped me understand how to enqueue jobs using perform_at when a notification has a scheduled_at value.
+
+Modification:
+I added model validation to ensure scheduled_at must be in the future before allowing scheduling.
+```
+
+---
+
+### Prompt 4 – Docker Setup
+
+```
+Prompt:
+What is the correct way to dockerize a Rails application that depends on PostgreSQL and Redis?
+
+How I used it:
+This helped me structure Dockerfile and docker-compose configuration for Rails, PostgreSQL, Redis, and Sidekiq.
+
+Modification:
+I configured the application to connect to services through Docker networking and environment variables.
+```
+
+---
+
+### Prompt 5 – API Documentation
+
+```
+Prompt:
+What sections should a good README include for a backend API project?
+
+How I used it:
+This helped structure the documentation with sections like setup instructions, architecture explanation, and API examples.
+
+Modification:
+I customized the documentation to match the actual endpoints and architecture implemented in this project.
+```
+
+---
+
+### Prompt 6 – Debugging Scheduled Jobs
+
+```
+Prompt:
+I scheduled a Sidekiq job using perform_at with a scheduled_at timestamp, but the job is not running at the expected time. What are common issues with scheduled jobs in Rails?
+
+How I used it:
+This helped identify potential timezone differences between the application and database that can affect scheduled execution.
+
+Modification:
+I verified timezone configuration and ensured scheduled_at values are stored and interpreted consistently.
+```
+
+---
+
+### Prompt 7 – Debugging Docker Startup
+
+```
+Prompt:
+My Rails container fails to connect to PostgreSQL when running docker-compose up. What is the best way to ensure Rails waits until the database is ready?
+
+How I used it:
+This helped identify that containers start in parallel and Rails may attempt to connect before PostgreSQL is ready.
+
+Modification:
+I implemented a docker-entrypoint script that waits for PostgreSQL using pg_isready before starting the Rails server.
+```
+
+---
+
+AI was mainly used for:
+
+* architectural discussion
 * debugging assistance
-* documentation formatting
-
-All code was reviewed and integrated manually.
+* infrastructure setup guidance
+* documentation structure
 
 ---
 
